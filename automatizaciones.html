@@ -130,15 +130,12 @@
   .toggle::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;right:3px}
   .toggle.off{background:#cfcada}.toggle.off::after{right:auto;left:3px}
   .toggle{cursor:pointer}
-  .rowact{position:relative;flex:0 0 auto}
-  .kebab{width:30px;height:30px;border-radius:8px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center}
-  .kebab:hover{background:#f2f0f8}.kebab svg{width:18px;height:18px}
-  .rmenu{position:absolute;top:34px;right:0;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:5px;min-width:158px;z-index:30;display:none}
-  .rmenu.show{display:block}
-  .rmenu button{display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink);padding:8px 10px;border-radius:7px;cursor:pointer;text-align:left}
-  .rmenu button:hover{background:var(--purple-050)}
-  .rmenu button svg{width:15px;height:15px;flex:0 0 15px;color:var(--muted)}
-  .rmenu button.del{color:var(--red)}.rmenu button.del:hover{background:#fbe9eb}.rmenu button.del svg{color:var(--red)}
+  .rowacts{display:flex;gap:5px;flex:0 0 auto}
+  .actbtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:8px;border:1px solid var(--line-2);background:#fff;color:var(--muted);cursor:pointer;font:inherit;font-size:12.5px;font-weight:600}
+  .actbtn:hover{background:var(--purple-050);border-color:var(--purple-200);color:var(--purple)}
+  .actbtn svg{width:16px;height:16px}
+  .actbtn.del:hover{background:#fbe9eb;border-color:#f3c6ca;color:var(--red)}
+  @media (max-width:640px){.actbtn .lbl{display:none}.actbtn{padding:0 9px}}
 
   /* ---- CHOOSER ---- */
   .chooser{max-width:730px;margin:52px auto;text-align:center;padding:0 24px}
@@ -431,12 +428,11 @@ function renderList(f){
    +'<span class="asp"></span><span class="estado '+(a.on?'on':'off')+'">'+(a.on?'Activa':'Pausada')+'</span>'
    +'<span class="stat"><b>'+a.runs+'</b> ejecuciones<br>últimos 30 días</span>'
    +'<span class="toggle'+(a.on?'':' off')+'" title="'+(a.on?'Pausar':'Activar')+'" onclick="toggleAuto('+i+')"></span>'
-   +'<div class="rowact"><button class="kebab" title="Acciones" onclick="toggleRowMenu(event,'+i+')">'+KEBAB+'</button>'
-   +'<div class="rmenu" id="rmenu-'+i+'">'
-     +'<button onclick="editAuto('+i+')">'+MI_EDIT+'Editar</button>'
-     +'<button onclick="dupAuto('+i+')">'+MI_DUP+'Duplicar</button>'
-     +'<button class="del" onclick="delAuto('+i+')">'+MI_DEL+'Eliminar</button>'
-   +'</div></div>'
+   +'<div class="rowacts">'
+     +'<button class="actbtn" title="Editar" onclick="editAuto('+i+')">'+MI_EDIT+'<span class="lbl">Editar</span></button>'
+     +'<button class="actbtn" title="Duplicar" onclick="dupAuto('+i+')">'+MI_DUP+'<span class="lbl">Duplicar</span></button>'
+     +'<button class="actbtn del" title="Eliminar" onclick="delAuto('+i+')">'+MI_DEL+'<span class="lbl">Eliminar</span></button>'
+   +'</div>'
    +'</div>';
  }).join('');
  document.getElementById('cAll').textContent=LIST.length;
