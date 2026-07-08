@@ -85,6 +85,8 @@
   .topbar{height:48px;flex:0 0 48px;display:flex;align-items:center;gap:10px;padding:0 18px;background:#fff;border-bottom:1px solid var(--line)}
   .crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--purple);font-weight:600}
   .crumb span{color:var(--faint);margin:0 5px}
+  .crumb .clink{color:var(--purple);font-weight:600;cursor:pointer}
+  .crumb .clink:hover{text-decoration:underline}
   .tb-sp{flex:1}
   .tb-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--muted);cursor:pointer}
   .tb-ic:hover{background:#f2f0f8}
@@ -257,6 +259,13 @@
 
           <!-- ===== CHOOSER ===== -->
           <section class="screen" id="s-chooser">
+            <div class="actionbar">
+              <button class="abback" onclick="go('list')" title="Volver a la lista">←</button>
+              <div class="nmwrap"><span class="k">Nueva automatización</span>
+                <div style="font-size:15px;font-weight:600;color:var(--ink)">Empezar</div></div>
+              <span class="absp"></span>
+              <button class="btn ghost sm" onclick="go('list')">Cancelar</button>
+            </div>
             <div class="chooser">
               <h2>¿Cómo querés empezar?</h2>
               <p class="cd">Elegí un punto de partida. Después construís el flujo paso a paso.</p>
@@ -286,6 +295,7 @@
                 <div style="font-size:15px;font-weight:600;color:var(--ink)">Plantillas por resultado</div></div>
               <span class="absp"></span>
               <input class="search" style="max-width:200px" placeholder="Buscar plantilla…">
+              <button class="btn ghost sm" onclick="go('list')" style="margin-left:8px">Cancelar</button>
             </div>
             <div style="max-width:560px;margin:26px auto;padding:0 22px" id="tplGroups"></div>
           </section>
@@ -298,6 +308,7 @@
                 <input class="nminput" id="autoName" value="Calificar leads de Meta y devolver conversión" placeholder="Automatización sin título" aria-label="Nombre"></div>
               <span class="absp"></span>
               <span class="saved">Borrador guardado</span>
+              <button class="btn ghost sm" onclick="go('list')">Cancelar</button>
               <button class="btn ghost sm">▶ Probar</button>
               <button class="btn primary sm hint" id="btnActivate" onclick="activate()">Activar</button>
             </div>
@@ -557,10 +568,11 @@ function pulseSide(){var el=document.querySelector('.prow.ai');if(el){el.animate
 // ---- navigation ----
 var SCREENS={list:'s-list',chooser:'s-chooser',templates:'s-templates',builder:'s-builder'};
 var HINTS={list:'#btnNew',chooser:'.startcard.hint',templates:null,builder:'#addStepBtn'};
+var CLINK='<a class="clink" onclick="go(\'list\')">Automatizaciones</a> <span>›</span> <a class="clink" onclick="go(\'list\')">Personalizadas</a>';
 var CRUMB={list:'Automatizaciones <span>›</span> <b>Personalizadas</b>',
- chooser:'Automatizaciones <span>›</span> Personalizadas <span>›</span> <b>Nueva</b>',
- templates:'Automatizaciones <span>›</span> Personalizadas <span>›</span> <b>Plantillas</b>',
- builder:'Automatizaciones <span>›</span> Personalizadas <span>›</span> <b>Nueva</b>'};
+ chooser:CLINK+' <span>›</span> <b>Nueva</b>',
+ templates:CLINK+' <span>›</span> <b>Plantillas</b>',
+ builder:CLINK+' <span>›</span> <b>Nueva</b>'};
 function clearHints(){document.querySelectorAll('.hint').forEach(function(e){e.classList.remove('hint');});}
 function setHint(sel){clearHints();if(sel){var e=document.querySelector(sel);if(e){e.classList.add('hint');if(e.classList.contains('btn')||e.id==='btnNew')e.classList.add('round');}}}
 function go(where){
