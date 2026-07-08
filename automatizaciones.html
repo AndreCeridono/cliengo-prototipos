@@ -261,7 +261,7 @@
               <h2>¿Cómo querés empezar?</h2>
               <p class="cd">Elegí un punto de partida. Después construís el flujo paso a paso.</p>
               <div class="startgrid">
-                <div class="startcard hint" onclick="go('builder')">
+                <div class="startcard hint" onclick="startBlank()">
                   <div class="si" style="background:var(--purple-050);color:var(--purple)" id="ic-scratch"></div>
                   <h3>Desde cero</h3><p>Armá el flujo en un lienzo en blanco y elegí cada paso.</p>
                 </div>
@@ -269,7 +269,7 @@
                   <div class="si" style="background:#eaf5ee;color:var(--green)" id="ic-tpl"></div>
                   <h3>Desde plantilla</h3><p>Partí de una receta lista, agrupada por resultado. Buscá y editá.</p>
                 </div>
-                <div class="startcard" onclick="go('builder')">
+                <div class="startcard" onclick="startTemplate('Calificar con IA y distribuir')">
                   <span class="soon">Próximo</span>
                   <div class="si" style="background:linear-gradient(135deg,#6941C6,#9b7ff0);color:#fff" id="ic-ai"></div>
                   <h3>Describilo con IA</h3><p>Escribí qué querés lograr y la IA arma el flujo por vos.</p>
@@ -295,7 +295,7 @@
             <div class="actionbar">
               <button class="abback" onclick="go('chooser')">←</button>
               <div class="nmwrap"><span class="k">Nombre</span>
-                <input class="nminput" id="autoName" value="Calificar leads de Meta y devolver conversión" aria-label="Nombre"></div>
+                <input class="nminput" id="autoName" value="Calificar leads de Meta y devolver conversión" placeholder="Automatización sin título" aria-label="Nombre"></div>
               <span class="absp"></span>
               <span class="saved">Borrador guardado</span>
               <button class="btn ghost sm">▶ Probar</button>
@@ -421,7 +421,7 @@ var TPL=[
 document.getElementById('tplGroups').innerHTML=TPL.map(function(G2){
  var head='<div style="font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.03em;margin:18px 0 8px">'+G2.g
   +(G2.badge?' <span style="color:var(--purple);font-size:10px;background:var(--purple-050);padding:2px 7px;border-radius:999px;margin-left:4px">'+G2.badge+'</span>':'')+'</div>';
- var rows=G2.rows.map(function(r){return '<div style="display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:8px;cursor:pointer" onclick="go(\'builder\')">'
+ var rows=G2.rows.map(function(r){return '<div style="display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:8px;cursor:pointer" onclick="startTemplate(\''+r.t+'\')">'
    +'<span style="width:30px;height:30px;border-radius:8px;flex:0 0 30px;display:grid;place-items:center;background:'+r.c+'">'+gi(r.i)+'</span>'
    +'<div style="min-width:0"><div style="font-size:13px;font-weight:600;color:var(--ink)">'+r.t+'</div><div style="font-size:11.5px;color:var(--muted)">'+r.d+'</div></div>'
    +'<span style="margin-left:auto;color:var(--faint)">→</span></div>';}).join('');
@@ -429,11 +429,43 @@ document.getElementById('tplGroups').innerHTML=TPL.map(function(G2){
 }).join('');
 
 // ---- builder flow ----
-var FLOW=[
+function defaultFlow(){return [
  {k:'Disparador',t:'Nueva conversación · desde Meta Ads',i:'trig',c:'#3b6fe0',trig:true},
  {k:'Condición',t:'Si etiqueta = "interesado"',i:'cond',c:'#6150AD'},
  {k:'Contacto',t:'Mover a etapa "Calificado"',i:'stage',c:'#1faa59'}
-];
+];}
+function blankFlow(){return [
+ {k:'Disparador',t:'Elegí un disparador',i:'trig',c:'#8a8a99',trig:true,empty:true}
+];}
+var FLOW=defaultFlow();
+// flujo pre-armado propio de cada plantilla (clave = título de la plantilla)
+var TEMPLATE_FLOWS={
+ 'Mensaje de bienvenida por WhatsApp':[
+  {k:'Disparador',t:'Contacto creado',i:'trig',c:'#3b6fe0',trig:true},
+  {k:'Comunicación',t:'Enviar plantilla de WhatsApp',i:'wa',c:'#25a35a'}],
+ 'Notificar nuevo lead al equipo':[
+  {k:'Disparador',t:'Nueva conversación',i:'trig',c:'#3b6fe0',trig:true},
+  {k:'Comunicación',t:'Enviar email al equipo',i:'mail',c:'#3b6fe0'}],
+ 'Calificar con IA y distribuir':[
+  {k:'Disparador',t:'Nueva conversación',i:'trig',c:'#3b6fe0',trig:true},
+  {k:'Inteligencia',t:'Agente IA · califica y responde',i:'ai',c:'#6941C6'},
+  {k:'Contacto',t:'Mover a etapa "Calificado"',i:'stage',c:'#1faa59'},
+  {k:'Conversación',t:'Asignar por ronda al equipo',i:'cond',c:'#6150AD'}],
+ 'Registrar conversión de Ads':[
+  {k:'Disparador',t:'Etiqueta "venta" agregada',i:'trig',c:'#3b6fe0',trig:true},
+  {k:'Integración',t:'Enviar conversión a Meta Ads',i:'meta',c:'#e0388a'}],
+ 'Seguimiento semanal a inactivos':[
+  {k:'Disparador',t:'Programado · lunes 9:00',i:'trig',c:'#3b6fe0',trig:true},
+  {k:'Condición',t:'Si sin actividad > 7 días',i:'cond',c:'#6150AD'},
+  {k:'Comunicación',t:'Enviar email',i:'mail',c:'#3b6fe0'}],
+ 'Campaña diaria por WhatsApp':[
+  {k:'Disparador',t:'Programado · 9:00',i:'trig',c:'#3b6fe0',trig:true},
+  {k:'Comunicación',t:'Enviar plantilla a un segmento',i:'wa',c:'#25a35a'}]
+};
+function cloneFlow(a){return a.map(function(n){return {k:n.k,t:n.t,i:n.i,c:n.c,trig:n.trig};});}
+function startBlank(){FLOW=blankFlow();var el=document.getElementById('autoName');if(el)el.value='';go('builder');}
+function startTemplate(name){var t=TEMPLATE_FLOWS[name];FLOW=t?cloneFlow(t):defaultFlow();
+ var el=document.getElementById('autoName');if(el)el.value=name||'Automatización sin título';go('builder');}
 var NODEMETA={ai:{k:'Inteligencia',t:'Agente IA · califica y responde',c:'#6941C6'},cond:{k:'Condición',t:'Nueva condición (IF)',c:'#6150AD'},wait:{k:'Espera',t:'Esperar 1 día',c:'#8a8a99'},wa:{k:'Comunicación',t:'Enviar plantilla de WhatsApp',c:'#25a35a'},mail:{k:'Comunicación',t:'Enviar email',c:'#3b6fe0'},meta:{k:'Integración',t:'Enviar conversión a Meta Ads',c:'#e0388a'},hook:{k:'Integración',t:'Webhook a URL externa',c:'#f0921f'}};
 var A_EDIT='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3.5l3.5 3.5L7 16.5 3 17l.5-4L13 3.5Z"/></svg>';
 var A_DUP='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="6.5" width="10" height="10" rx="2"/><path d="M13 6.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h1.5"/></svg>';
@@ -543,7 +575,7 @@ function activate(){
  var t=document.getElementById('toast');t.classList.add('show');clearHints();
  setTimeout(function(){t.classList.remove('show');go('list');},1700);
 }
-function reset(){FLOW.length=3;renderFlow&&renderFlow();go('list');}
+function reset(){FLOW=defaultFlow();var el=document.getElementById('autoName');if(el)el.value='Calificar leads de Meta y devolver conversión';renderFlow();go('list');}
 // ---- add-step drawer (acciones agrupadas) ----
 var AP={
  filter:'<path d="M3 4.5h14l-5.3 6.2V16l-3.4 1.6v-8.9L3 4.5Z"/>',
