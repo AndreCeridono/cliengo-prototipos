@@ -136,6 +136,34 @@
   .actbtn svg{width:16px;height:16px}
   .actbtn.del:hover{background:#fbe9eb;border-color:#f3c6ca;color:var(--red)}
   @media (max-width:640px){.actbtn .lbl{display:none}.actbtn{padding:0 9px}}
+  .stat.link{cursor:pointer;border-radius:8px;padding:4px 7px;transition:.12s}
+  .stat.link:hover{background:var(--purple-050);color:var(--purple)}
+  /* ejecuciones */
+  .scrollx{overflow-x:auto}
+  .runstable{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13px}
+  .runstable th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);padding:11px 14px;border-bottom:1px solid var(--line);background:#faf9fe;white-space:nowrap}
+  .runstable td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--ink)}
+  .runstable tr:last-child td{border-bottom:0}
+  .runstable td.rdet{color:var(--muted)}
+  .runstable td.rt{color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .runbadge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px}
+  .runbadge.ok{background:#e7f5ec;color:var(--green)}.runbadge.err{background:#fdeaea;color:var(--red)}
+  .runchip{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink);background:var(--purple-050);border:1px solid var(--purple-200);border-radius:999px;padding:5px 12px;margin:0 0 14px}
+  .runchip b{font-weight:600}.runchip .x{cursor:pointer;color:var(--purple);font-weight:700}
+  /* describir con IA */
+  .soonpill2{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--purple);background:var(--purple-050);padding:3px 8px;border-radius:999px}
+  .aiwrap{max-width:600px;margin:34px auto;padding:0 24px;text-align:center}
+  .aihero .aiglow{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#6941C6,#9b7ff0);display:grid;place-items:center;margin:0 auto 16px;font-size:26px;box-shadow:0 10px 26px rgba(97,80,173,.28)}
+  .aihero h2{font-size:22px;color:var(--ink);font-weight:650;margin:0 0 6px}
+  .aihero p{font-size:13.5px;color:var(--muted);margin:0 0 22px;line-height:1.5}
+  .aiinput{width:100%;border:1.5px solid var(--line-2);border-radius:13px;padding:14px 15px;font:inherit;font-size:14px;color:var(--ink);resize:vertical;min-height:84px;font-family:var(--font)}
+  .aiinput:focus{outline:0;border-color:var(--purple)}
+  .aichips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 22px}
+  .aichip{font-size:12px;color:var(--purple);background:var(--purple-050);border:1px solid var(--purple-200);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.12s}
+  .aichip:hover{background:var(--purple-100)}
+  .aistatus{margin-top:16px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:9px;justify-content:center;min-height:20px}
+  .spin{width:15px;height:15px;border:2px solid var(--purple-200);border-top-color:var(--purple);border-radius:50%;display:inline-block;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
   /* ---- CHOOSER ---- */
   .chooser{max-width:730px;margin:52px auto;text-align:center;padding:0 24px}
@@ -244,23 +272,35 @@
           <section class="screen show" id="s-list">
             <div class="listwrap">
               <div class="subtabs">
-                <span class="subtab on">Automatizaciones</span>
-                <span class="subtab">Ejecuciones</span>
+                <span class="subtab on" id="tab-autos" onclick="switchTab('autos')">Automatizaciones</span>
+                <span class="subtab" id="tab-runs" onclick="switchTab('runs')">Ejecuciones</span>
               </div>
-              <div class="listhead">
-                <div><h2 class="tt">Automatizaciones personalizadas</h2>
-                  <p class="sub">Configura acciones automáticas cuando ocurren eventos en tus conversaciones, contactos o canales.</p></div>
-                <button class="btn primary hint" id="btnNew" onclick="go('chooser')">+ Nueva automatización</button>
-              </div>
-              <div class="listfilters">
-                <div class="fchips">
-                  <span class="fchip on" data-f="all" onclick="filterList('all',this)">Todas <em id="cAll">0</em></span>
-                  <span class="fchip" data-f="on" onclick="filterList('on',this)">Activas <em id="cOn">0</em></span>
-                  <span class="fchip" data-f="off" onclick="filterList('off',this)">Pausadas <em id="cOff">0</em></span>
+
+              <div id="panel-autos">
+                <div class="listhead">
+                  <div><h2 class="tt">Automatizaciones personalizadas</h2>
+                    <p class="sub">Configura acciones automáticas cuando ocurren eventos en tus conversaciones, contactos o canales.</p></div>
+                  <button class="btn primary hint" id="btnNew" onclick="go('chooser')">+ Nueva automatización</button>
                 </div>
-                <input class="search" style="max-width:210px" placeholder="Buscar automatización…">
+                <div class="listfilters">
+                  <div class="fchips">
+                    <span class="fchip on" data-f="all" onclick="filterList('all',this)">Todas <em id="cAll">0</em></span>
+                    <span class="fchip" data-f="on" onclick="filterList('on',this)">Activas <em id="cOn">0</em></span>
+                    <span class="fchip" data-f="off" onclick="filterList('off',this)">Pausadas <em id="cOff">0</em></span>
+                  </div>
+                  <input class="search" style="max-width:210px" placeholder="Buscar automatización…">
+                </div>
+                <div id="listRows"></div>
               </div>
-              <div id="listRows"></div>
+
+              <div id="panel-runs" style="display:none">
+                <div class="listhead">
+                  <div><h2 class="tt">Ejecuciones</h2>
+                    <p class="sub">Historial de ejecuciones de tus automatizaciones en los últimos 30 días.</p></div>
+                </div>
+                <div id="runsFilter"></div>
+                <div class="scrollx"><table class="runstable" id="runsTable"></table></div>
+              </div>
             </div>
           </section>
 
@@ -285,12 +325,39 @@
                   <div class="si" style="background:#eaf5ee;color:var(--green)" id="ic-tpl"></div>
                   <h3>Desde plantilla</h3><p>Partí de una receta lista, agrupada por resultado. Buscá y editá.</p>
                 </div>
-                <div class="startcard" onclick="startBlank()">
+                <div class="startcard" onclick="go('ai')">
                   <span class="soon">Próximo</span>
                   <div class="si" style="background:linear-gradient(135deg,#6941C6,#9b7ff0);color:#fff" id="ic-ai"></div>
                   <h3>Describilo con IA</h3><p>Escribí qué querés lograr y la IA arma el flujo por vos.</p>
                 </div>
               </div>
+            </div>
+          </section>
+
+          <!-- ===== DESCRIBIR CON IA ===== -->
+          <section class="screen" id="s-ai">
+            <div class="actionbar">
+              <button class="abback" onclick="go('chooser')" title="Volver">←</button>
+              <div class="nmwrap"><span class="k">Nueva automatización</span>
+                <div style="font-size:15px;font-weight:600;color:var(--ink)">Describilo con IA</div></div>
+              <span class="absp"></span>
+              <span class="soonpill2">Próximo</span>
+              <button class="btn ghost sm" onclick="go('list')">Cancelar</button>
+            </div>
+            <div class="aiwrap">
+              <div class="aihero">
+                <div class="aiglow">✨</div>
+                <h2>¿Qué querés automatizar?</h2>
+                <p>Describí en tus palabras qué querés lograr y la IA arma el flujo por vos. Después lo ajustás paso a paso.</p>
+              </div>
+              <textarea id="aiPrompt" class="aiinput" rows="3" placeholder="Ej: Cuando llega un lead desde Meta Ads, que la IA lo califique, lo mueva a la etapa Calificado y avise a ventas por WhatsApp."></textarea>
+              <div class="aichips">
+                <span class="aichip" onclick="useExample(this)">Dar la bienvenida por WhatsApp a cada contacto nuevo</span>
+                <span class="aichip" onclick="useExample(this)">Calificar leads con IA y asignarlos al equipo</span>
+                <span class="aichip" onclick="useExample(this)">Registrar la conversión en Meta cuando se marca una venta</span>
+              </div>
+              <button class="btn primary" id="aiGenBtn" onclick="generateAI()">✨ Generar automatización</button>
+              <div class="aistatus" id="aiStatus"></div>
             </div>
           </section>
 
@@ -426,7 +493,7 @@ function renderList(f){
   return '<div class="arow"><span class="aico" style="background:'+a.c+'">'+gi(a.i)+'</span>'
    +'<div style="min-width:0"><div class="an">'+a.n+'</div><div class="ad">'+a.d+'</div></div>'
    +'<span class="asp"></span><span class="estado '+(a.on?'on':'off')+'">'+(a.on?'Activa':'Pausada')+'</span>'
-   +'<span class="stat"><b>'+a.runs+'</b> ejecuciones<br>últimos 30 días</span>'
+   +'<span class="stat link" title="Ver ejecuciones de esta automatización" onclick="switchTab(\'runs\',\''+a.n+'\')"><b>'+a.runs+'</b> ejecuciones<br>últimos 30 días</span>'
    +'<span class="toggle'+(a.on?'':' off')+'" title="'+(a.on?'Pausar':'Activar')+'" onclick="toggleAuto('+i+')"></span>'
    +'<div class="rowacts">'
      +'<button class="actbtn" title="Editar" onclick="editAuto('+i+')">'+MI_EDIT+'<span class="lbl">Editar</span></button>'
@@ -447,6 +514,59 @@ function toggleAuto(i){LIST[i].on=!LIST[i].on;renderList();}
 function editAuto(i){closeRowMenus();var a=LIST[i];FLOW=defaultFlow();var el=document.getElementById('autoName');if(el)el.value=a.n;go('builder');}
 function dupAuto(i){var a=LIST[i];LIST.splice(i+1,0,{i:a.i,c:a.c,n:a.n+' (copia)',d:a.d,runs:'0',on:false});closeRowMenus();renderList();showToast('Automatización duplicada');}
 function delAuto(i){LIST.splice(i,1);closeRowMenus();renderList();showToast('Automatización eliminada');}
+// ---- ejecuciones ----
+var RUNS=[
+ {a:'Mensaje de bienvenida por WhatsApp',ok:true,d:'Enviado a +54 9 11 5555-1234',t:'Hoy 14:32',dur:'0,8 s'},
+ {a:'Registrar venta en Meta Ads',ok:true,d:'Conversión enviada · valor $12.400',t:'Hoy 13:58',dur:'1,2 s'},
+ {a:'Calificar leads con IA y distribuir',ok:true,d:'Calificado "Caliente" · asignado a Ana',t:'Hoy 13:41',dur:'2,1 s'},
+ {a:'Asignar y avisar a ventas',ok:false,d:'Error: no había usuarios con cupo disponible',t:'Hoy 12:10',dur:'0,5 s'},
+ {a:'Mensaje de bienvenida por WhatsApp',ok:true,d:'Enviado a +54 9 351 444-9021',t:'Hoy 11:07',dur:'0,7 s'},
+ {a:'Registrar venta en Meta Ads',ok:true,d:'Conversión enviada · valor $8.900',t:'Ayer 18:44',dur:'1,0 s'},
+ {a:'Calificar leads con IA y distribuir',ok:true,d:'Calificado "Tibio" · en cola de asignación',t:'Ayer 16:22',dur:'1,9 s'},
+ {a:'Asignar y avisar a ventas',ok:true,d:'Asignado a Diego · aviso enviado',t:'Ayer 09:15',dur:'0,6 s'}
+];
+var runsAuto=null;
+function switchTab(tab,autoName){
+ var isRuns=(tab==='runs');
+ document.getElementById('panel-autos').style.display=isRuns?'none':'';
+ document.getElementById('panel-runs').style.display=isRuns?'':'none';
+ document.getElementById('tab-autos').classList.toggle('on',!isRuns);
+ document.getElementById('tab-runs').classList.toggle('on',isRuns);
+ if(isRuns){runsAuto=autoName||null;renderRuns();document.getElementById('body').scrollTop=0;}
+}
+function renderRuns(){
+ var rows=RUNS.filter(function(r){return !runsAuto||r.a===runsAuto;});
+ document.getElementById('runsFilter').innerHTML=runsAuto
+  ?'<div class="runchip">Filtrando por <b>'+runsAuto+'</b> <span class="x" title="Quitar filtro" onclick="switchTab(\'runs\')">✕</span></div>':'';
+ var head='<thead><tr><th>Automatización</th><th>Resultado</th><th>Detalle</th><th>Fecha</th><th>Duración</th></tr></thead>';
+ var body='<tbody>'+(rows.length?rows.map(function(r){
+  return '<tr><td><b>'+r.a+'</b></td>'
+   +'<td><span class="runbadge '+(r.ok?'ok':'err')+'">'+(r.ok?'Éxito':'Error')+'</span></td>'
+   +'<td class="rdet">'+r.d+'</td><td class="rt">'+r.t+'</td><td class="rt">'+r.dur+'</td></tr>';
+ }).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--faint);padding:34px">Sin ejecuciones para esta automatización.</td></tr>')+'</tbody>';
+ document.getElementById('runsTable').innerHTML=head+body;
+}
+// ---- describir con IA (demo) ----
+function useExample(el){document.getElementById('aiPrompt').value=el.textContent;}
+function aiNameFor(p){var t=p.replace(/\s+/g,' ').trim();return t.length>48?t.slice(0,45)+'…':t;}
+function aiFlowFor(p){var s=p.toLowerCase();
+ if(s.indexOf('bienvenid')>=0||s.indexOf('contacto nuevo')>=0||s.indexOf('nuevo contacto')>=0)return cloneFlow(TEMPLATE_FLOWS['Mensaje de bienvenida por WhatsApp']);
+ if(s.indexOf('conversi')>=0||s.indexOf('meta')>=0||s.indexOf('venta')>=0)return cloneFlow(TEMPLATE_FLOWS['Registrar conversión de Ads']);
+ if(s.indexOf('califi')>=0||s.indexOf('asign')>=0||s.indexOf('distribu')>=0||s.indexOf(' ia')>=0)return cloneFlow(TEMPLATE_FLOWS['Calificar con IA y distribuir']);
+ return defaultFlow();
+}
+function generateAI(){
+ var el=document.getElementById('aiPrompt');var p=(el.value||'').trim();
+ if(!p){el.focus();el.animate([{borderColor:'#d64550'},{borderColor:'rgba(0,0,0,.16)'}],{duration:800});return;}
+ var st=document.getElementById('aiStatus');var btn=document.getElementById('aiGenBtn');
+ btn.disabled=true;btn.style.opacity=.6;st.innerHTML='<span class="spin"></span> Generando el flujo con IA…';
+ setTimeout(function(){
+  btn.disabled=false;btn.style.opacity=1;st.innerHTML='';
+  FLOW=aiFlowFor(p);
+  var nm=document.getElementById('autoName');if(nm)nm.value=aiNameFor(p);
+  go('builder');showToast('Flujo generado con IA · revisalo y ajustalo');
+ },1200);
+}
 renderList('all');
 
 // ---- templates ----
@@ -593,11 +713,12 @@ function addNode(type){
 function pulseSide(){var el=document.querySelector('.prow.ai');if(el){el.animate([{transform:'scale(1)'},{transform:'scale(1.04)'},{transform:'scale(1)'}],{duration:500});}}
 
 // ---- navigation ----
-var SCREENS={list:'s-list',chooser:'s-chooser',templates:'s-templates',builder:'s-builder'};
-var HINTS={list:'#btnNew',chooser:'.startcard.hint',templates:null,builder:'#addStepBtn'};
+var SCREENS={list:'s-list',chooser:'s-chooser',ai:'s-ai',templates:'s-templates',builder:'s-builder'};
+var HINTS={list:'#btnNew',chooser:'.startcard.hint',ai:'#aiGenBtn',templates:null,builder:'#addStepBtn'};
 var CLINK='<a class="clink" onclick="go(\'list\')">Automatizaciones</a> <span>›</span> <a class="clink" onclick="go(\'list\')">Personalizadas</a>';
 var CRUMB={list:'Automatizaciones <span>›</span> <b>Personalizadas</b>',
  chooser:CLINK+' <span>›</span> <b>Nueva</b>',
+ ai:CLINK+' <span>›</span> <b>Describir con IA</b>',
  templates:CLINK+' <span>›</span> <b>Plantillas</b>',
  builder:CLINK+' <span>›</span> <b>Nueva</b>'};
 function clearHints(){document.querySelectorAll('.hint').forEach(function(e){e.classList.remove('hint');});}
@@ -608,6 +729,7 @@ function go(where){
  document.getElementById('urlSeg').innerHTML=(where==='list')?'custom':'custom/new';
  document.getElementById('body').scrollTop=0;
  if(where==='builder')renderFlow();
+ if(where==='list')switchTab('autos');
  setHint(HINTS[where]);
 }
 function showToast(msg){var t=document.getElementById('toast');
