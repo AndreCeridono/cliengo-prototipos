@@ -130,12 +130,16 @@
   .toggle::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;right:3px}
   .toggle.off{background:#cfcada}.toggle.off::after{right:auto;left:3px}
   .toggle{cursor:pointer}
+  .aitem+.aitem{margin-top:10px}
   .rowacts{display:flex;gap:5px;flex:0 0 auto}
-  .actbtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:8px;border:1px solid var(--line-2);background:#fff;color:var(--muted);cursor:pointer;font:inherit;font-size:12.5px;font-weight:600}
+  .actbtn{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:8px;border:1px solid var(--line-2);background:#fff;color:var(--muted);cursor:pointer}
   .actbtn:hover{background:var(--purple-050);border-color:var(--purple-200);color:var(--purple)}
   .actbtn svg{width:16px;height:16px}
   .actbtn.del:hover{background:#fbe9eb;border-color:#f3c6ca;color:var(--red)}
-  @media (max-width:640px){.actbtn .lbl{display:none}.actbtn{padding:0 9px}}
+  .actbtn.on{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff}
+  .runpanel{display:none;padding:10px 0 2px 52px}
+  .runpanel.open{display:block;animation:fade .2s ease}
+  .runempty{font-size:12.5px;color:var(--faint);padding:13px 15px;background:#fff;border:1px solid var(--line);border-radius:10px}
   .stat.link{cursor:pointer;border-radius:8px;padding:4px 7px;transition:.12s}
   .stat.link:hover{background:var(--purple-050);color:var(--purple)}
   /* ejecuciones */
@@ -271,36 +275,20 @@
           <!-- ===== LISTA ===== -->
           <section class="screen show" id="s-list">
             <div class="listwrap">
-              <div class="subtabs">
-                <span class="subtab on" id="tab-autos" onclick="switchTab('autos')">Automatizaciones</span>
-                <span class="subtab" id="tab-runs" onclick="switchTab('runs')">Ejecuciones</span>
+              <div class="listhead">
+                <div><h2 class="tt">Automatizaciones personalizadas</h2>
+                  <p class="sub">Configura acciones automáticas cuando ocurren eventos en tus conversaciones, contactos o canales.</p></div>
+                <button class="btn primary hint" id="btnNew" onclick="go('chooser')">+ Nueva automatización</button>
               </div>
-
-              <div id="panel-autos">
-                <div class="listhead">
-                  <div><h2 class="tt">Automatizaciones personalizadas</h2>
-                    <p class="sub">Configura acciones automáticas cuando ocurren eventos en tus conversaciones, contactos o canales.</p></div>
-                  <button class="btn primary hint" id="btnNew" onclick="go('chooser')">+ Nueva automatización</button>
+              <div class="listfilters">
+                <div class="fchips">
+                  <span class="fchip on" data-f="all" onclick="filterList('all',this)">Todas <em id="cAll">0</em></span>
+                  <span class="fchip" data-f="on" onclick="filterList('on',this)">Activas <em id="cOn">0</em></span>
+                  <span class="fchip" data-f="off" onclick="filterList('off',this)">Pausadas <em id="cOff">0</em></span>
                 </div>
-                <div class="listfilters">
-                  <div class="fchips">
-                    <span class="fchip on" data-f="all" onclick="filterList('all',this)">Todas <em id="cAll">0</em></span>
-                    <span class="fchip" data-f="on" onclick="filterList('on',this)">Activas <em id="cOn">0</em></span>
-                    <span class="fchip" data-f="off" onclick="filterList('off',this)">Pausadas <em id="cOff">0</em></span>
-                  </div>
-                  <input class="search" style="max-width:210px" placeholder="Buscar automatización…">
-                </div>
-                <div id="listRows"></div>
+                <input class="search" style="max-width:210px" placeholder="Buscar automatización…">
               </div>
-
-              <div id="panel-runs" style="display:none">
-                <div class="listhead">
-                  <div><h2 class="tt">Ejecuciones</h2>
-                    <p class="sub">Historial de ejecuciones de tus automatizaciones en los últimos 30 días.</p></div>
-                </div>
-                <div id="runsFilter"></div>
-                <div class="scrollx"><table class="runstable" id="runsTable"></table></div>
-              </div>
+              <div id="listRows"></div>
             </div>
           </section>
 
@@ -482,7 +470,7 @@ var LIST=[
 var MI_EDIT='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3.5l3.5 3.5L7 16.5 3 17l.5-4L13 3.5Z"/></svg>';
 var MI_DUP='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="6.5" width="10" height="10" rx="2"/><path d="M13 6.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h1.5"/></svg>';
 var MI_DEL='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V6m1.5 0-.6 9a1.5 1.5 0 0 1-1.5 1.4H7.1A1.5 1.5 0 0 1 5.6 15L5 6"/></svg>';
-var KEBAB='<svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg>';
+var MI_RUNS='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 10.5h3l2-5.5 3 11 2-5.5h4.5"/></svg>';
 var curFilter='all';
 function renderList(f){
  if(f)curFilter=f; f=curFilter;
@@ -490,16 +478,20 @@ function renderList(f){
  var box=document.getElementById('listRows');
  if(!items.length){box.innerHTML='<div style="text-align:center;color:var(--faint);padding:44px 0;font-size:13px">No hay automatizaciones en esta vista.</div>';}
  else box.innerHTML=items.map(function(o){var a=o.a,i=o.idx;
-  return '<div class="arow"><span class="aico" style="background:'+a.c+'">'+gi(a.i)+'</span>'
+  return '<div class="aitem">'
+   +'<div class="arow"><span class="aico" style="background:'+a.c+'">'+gi(a.i)+'</span>'
    +'<div style="min-width:0"><div class="an">'+a.n+'</div><div class="ad">'+a.d+'</div></div>'
    +'<span class="asp"></span><span class="estado '+(a.on?'on':'off')+'">'+(a.on?'Activa':'Pausada')+'</span>'
-   +'<span class="stat link" title="Ver ejecuciones de esta automatización" onclick="switchTab(\'runs\',\''+a.n+'\')"><b>'+a.runs+'</b> ejecuciones<br>últimos 30 días</span>'
+   +'<span class="stat link" title="Ver ejecuciones" onclick="toggleRuns(event,'+i+')"><b>'+a.runs+'</b> ejec.<br>últ. 30 días</span>'
    +'<span class="toggle'+(a.on?'':' off')+'" title="'+(a.on?'Pausar':'Activar')+'" onclick="toggleAuto('+i+')"></span>'
    +'<div class="rowacts">'
-     +'<button class="actbtn" title="Editar" onclick="editAuto('+i+')">'+MI_EDIT+'<span class="lbl">Editar</span></button>'
-     +'<button class="actbtn" title="Duplicar" onclick="dupAuto('+i+')">'+MI_DUP+'<span class="lbl">Duplicar</span></button>'
-     +'<button class="actbtn del" title="Eliminar" onclick="delAuto('+i+')">'+MI_DEL+'<span class="lbl">Eliminar</span></button>'
+     +'<button class="actbtn runbtn" id="runbtn-'+i+'" title="Ver ejecuciones" onclick="toggleRuns(event,'+i+')">'+MI_RUNS+'</button>'
+     +'<button class="actbtn" title="Editar" onclick="editAuto('+i+')">'+MI_EDIT+'</button>'
+     +'<button class="actbtn" title="Duplicar" onclick="dupAuto('+i+')">'+MI_DUP+'</button>'
+     +'<button class="actbtn del" title="Eliminar" onclick="delAuto('+i+')">'+MI_DEL+'</button>'
    +'</div>'
+   +'</div>'
+   +'<div class="runpanel" id="rp-'+i+'"></div>'
    +'</div>';
  }).join('');
  document.getElementById('cAll').textContent=LIST.length;
@@ -525,26 +517,18 @@ var RUNS=[
  {a:'Calificar leads con IA y distribuir',ok:true,d:'Calificado "Tibio" · en cola de asignación',t:'Ayer 16:22',dur:'1,9 s'},
  {a:'Asignar y avisar a ventas',ok:true,d:'Asignado a Diego · aviso enviado',t:'Ayer 09:15',dur:'0,6 s'}
 ];
-var runsAuto=null;
-function switchTab(tab,autoName){
- var isRuns=(tab==='runs');
- document.getElementById('panel-autos').style.display=isRuns?'none':'';
- document.getElementById('panel-runs').style.display=isRuns?'':'none';
- document.getElementById('tab-autos').classList.toggle('on',!isRuns);
- document.getElementById('tab-runs').classList.toggle('on',isRuns);
- if(isRuns){runsAuto=autoName||null;renderRuns();document.getElementById('body').scrollTop=0;}
+function runPanelHtml(name){
+ var rows=RUNS.filter(function(r){return r.a===name;});
+ if(!rows.length)return '<div class="runempty">Sin ejecuciones en los últimos 30 días.</div>';
+ return '<table class="runstable"><thead><tr><th>Resultado</th><th>Detalle</th><th>Fecha</th><th>Duración</th></tr></thead><tbody>'
+  +rows.map(function(r){return '<tr><td><span class="runbadge '+(r.ok?'ok':'err')+'">'+(r.ok?'Éxito':'Error')+'</span></td>'
+   +'<td class="rdet">'+r.d+'</td><td class="rt">'+r.t+'</td><td class="rt">'+r.dur+'</td></tr>';}).join('')
+  +'</tbody></table>';
 }
-function renderRuns(){
- var rows=RUNS.filter(function(r){return !runsAuto||r.a===runsAuto;});
- document.getElementById('runsFilter').innerHTML=runsAuto
-  ?'<div class="runchip">Filtrando por <b>'+runsAuto+'</b> <span class="x" title="Quitar filtro" onclick="switchTab(\'runs\')">✕</span></div>':'';
- var head='<thead><tr><th>Automatización</th><th>Resultado</th><th>Detalle</th><th>Fecha</th><th>Duración</th></tr></thead>';
- var body='<tbody>'+(rows.length?rows.map(function(r){
-  return '<tr><td><b>'+r.a+'</b></td>'
-   +'<td><span class="runbadge '+(r.ok?'ok':'err')+'">'+(r.ok?'Éxito':'Error')+'</span></td>'
-   +'<td class="rdet">'+r.d+'</td><td class="rt">'+r.t+'</td><td class="rt">'+r.dur+'</td></tr>';
- }).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--faint);padding:34px">Sin ejecuciones para esta automatización.</td></tr>')+'</tbody>';
- document.getElementById('runsTable').innerHTML=head+body;
+function toggleRuns(ev,i){ev.stopPropagation();
+ var p=document.getElementById('rp-'+i);var btn=document.getElementById('runbtn-'+i);
+ if(p.classList.contains('open')){p.classList.remove('open');if(btn)btn.classList.remove('on');return;}
+ p.innerHTML=runPanelHtml(LIST[i].n);p.classList.add('open');if(btn)btn.classList.add('on');
 }
 // ---- describir con IA (demo) ----
 function useExample(el){document.getElementById('aiPrompt').value=el.textContent;}
@@ -729,7 +713,6 @@ function go(where){
  document.getElementById('urlSeg').innerHTML=(where==='list')?'custom':'custom/new';
  document.getElementById('body').scrollTop=0;
  if(where==='builder')renderFlow();
- if(where==='list')switchTab('autos');
  setHint(HINTS[where]);
 }
 function showToast(msg){var t=document.getElementById('toast');
