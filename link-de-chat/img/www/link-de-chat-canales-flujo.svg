@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="600" viewBox="0 0 720 600" role="img" aria-labelledby="t">
+  <title id="t">Un link de chat compartido en la bio de Instagram, en un mensaje de WhatsApp y en un QR impreso abre el chatbot del negocio a pantalla completa</title>
+  <style>
+    text { font-family: Inter, 'Segoe UI', Arial, sans-serif; fill: #040305; }
+    .k { font-size: 15px; font-weight: 700; letter-spacing: .08em; fill: #6234B2; }
+    .b { font-size: 19px; font-weight: 700; }
+    .s { font-size: 15px; fill: #4a4458; }
+    .card { fill: #FFFFFF; stroke: #E4DAFD; stroke-width: 2; }
+    .ring { fill: none; stroke: #7F44F8; stroke-width: 3; opacity: 0; }
+    .line { stroke: #D9CCFC; stroke-width: 3; stroke-dasharray: 2 9; stroke-linecap: round; fill: none; }
+    .dot { fill: #7F44F8; opacity: 0; }
+    .r1 { animation: on 7.5s infinite; }
+    .r2 { animation: on 7.5s 2.5s infinite; }
+    .r3 { animation: on 7.5s 5s infinite; }
+    .d1 { animation: go1 7.5s .6s infinite; }
+    .d2 { animation: go2 7.5s 3.1s infinite; }
+    .d3 { animation: go3 7.5s 5.6s infinite; }
+    @keyframes on { 0% { opacity: 0 } 4%, 26% { opacity: 1 } 32%, 100% { opacity: 0 } }
+    @keyframes go1 { 0% { opacity: 0; transform: translate(0,0) } 3% { opacity: 1 } 14% { opacity: 1; transform: translate(118px,118px) } 16%, 100% { opacity: 0; transform: translate(118px,118px) } }
+    @keyframes go2 { 0% { opacity: 0; transform: translate(0,0) } 3% { opacity: 1 } 14% { opacity: 1; transform: translate(118px,0) } 16%, 100% { opacity: 0; transform: translate(118px,0) } }
+    @keyframes go3 { 0% { opacity: 0; transform: translate(0,0) } 3% { opacity: 1 } 14% { opacity: 1; transform: translate(118px,-118px) } 16%, 100% { opacity: 0; transform: translate(118px,-118px) } }
+    @media (prefers-reduced-motion: reduce) {
+      .r1, .r2, .r3, .d1, .d2, .d3 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="600" rx="24" fill="#F6F2FF"/>
+
+  <!-- Dónde se comparte -->
+  <rect class="card" x="32" y="124" width="300" height="96" rx="12"/>
+  <rect class="ring r1" x="32" y="124" width="300" height="96" rx="12"/>
+  <circle cx="76" cy="172" r="22" fill="#EFE8FF"/>
+  <rect x="64" y="160" width="24" height="24" rx="7" fill="none" stroke="#6234B2" stroke-width="2.5"/>
+  <circle cx="76" cy="172" r="6" fill="none" stroke="#6234B2" stroke-width="2.5"/>
+  <text class="k" x="112" y="160">EN TU BIO</text>
+  <text class="b" x="112" y="186">Bio de Instagram</text>
+  <text class="s" x="112" y="206">chat.cliengo.com/tu-negocio</text>
+
+  <rect class="card" x="32" y="252" width="300" height="96" rx="12"/>
+  <rect class="ring r2" x="32" y="252" width="300" height="96" rx="12"/>
+  <circle cx="76" cy="300" r="22" fill="#EFE8FF"/>
+  <path d="M64 291 h24 a4 4 0 0 1 4 4 v12 a4 4 0 0 1 -4 4 h-16 l-8 6 v-6 a4 4 0 0 1 -4 -4 v-12 a4 4 0 0 1 4 -4 z" fill="none" stroke="#6234B2" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="90" cy="288" r="5" fill="#3BB507"/>
+  <text class="k" x="112" y="288">EN UN MENSAJE</text>
+  <text class="b" x="112" y="314">WhatsApp</text>
+  <text class="s" x="112" y="334">con vista previa de tu marca</text>
+
+  <rect class="card" x="32" y="380" width="300" height="96" rx="12"/>
+  <rect class="ring r3" x="32" y="380" width="300" height="96" rx="12"/>
+  <circle cx="76" cy="428" r="22" fill="#EFE8FF"/>
+  <g fill="#6234B2">
+    <rect x="63" y="415" width="9" height="9" rx="1"/><rect x="80" y="415" width="9" height="9" rx="1"/>
+    <rect x="63" y="432" width="9" height="9" rx="1"/><rect x="76" y="428" width="4" height="4"/>
+    <rect x="82" y="433" width="4" height="4"/><rect x="86" y="438" width="4" height="4"/>
+  </g>
+  <text class="k" x="112" y="416">IMPRESO</text>
+  <text class="b" x="112" y="442">Código QR</text>
+  <text class="s" x="112" y="462">en tu local o en un folleto</text>
+
+  <!-- Hacia el teléfono -->
+  <path class="line" d="M332 172 C 380 172, 380 300, 420 300"/>
+  <path class="line" d="M332 300 L 420 300"/>
+  <path class="line" d="M332 428 C 380 428, 380 300, 420 300"/>
+  <circle class="dot d1" cx="332" cy="172" r="7"/>
+  <circle class="dot d2" cx="332" cy="300" r="7"/>
+  <circle class="dot d3" cx="332" cy="428" r="7"/>
+
+  <!-- Teléfono con el chat a pantalla completa -->
+  <rect x="424" y="40" width="264" height="520" rx="36" fill="#040305"/>
+  <rect x="434" y="50" width="244" height="500" rx="28" fill="#FFFFFA"/>
+  <rect x="434" y="50" width="244" height="84" rx="28" fill="#6234B2"/>
+  <rect x="434" y="106" width="244" height="28" fill="#6234B2"/>
+  <circle cx="470" cy="94" r="18" fill="#FFFFFA"/>
+  <text x="459" y="100" style="font-size:15px;font-weight:800;fill:#6234B2">TN</text>
+  <text x="498" y="90" style="font-size:16px;font-weight:700;fill:#FFFFFA">Tu negocio</text>
+  <text x="498" y="110" style="font-size:12px;fill:#E4DAFD">chat.cliengo.com/tu-negocio</text>
+
+  <rect x="450" y="152" width="196" height="62" rx="12" fill="#F1ECFB"/>
+  <text x="462" y="176" style="font-size:13px">¡Hola! Soy el asistente de</text>
+  <text x="462" y="196" style="font-size:13px">Tu negocio. ¿En qué te ayudo?</text>
+
+  <rect x="450" y="226" width="110" height="30" rx="8" fill="none" stroke="#6234B2" stroke-width="1.5"/>
+  <text x="464" y="246" style="font-size:13px;font-weight:700;fill:#6234B2">Ver productos</text>
+  <rect x="566" y="226" width="80" height="30" rx="8" fill="none" stroke="#6234B2" stroke-width="1.5"/>
+  <text x="580" y="246" style="font-size:13px;font-weight:700;fill:#6234B2">Horarios</text>
+  <rect x="450" y="262" width="138" height="30" rx="8" fill="none" stroke="#6234B2" stroke-width="1.5"/>
+  <text x="464" y="282" style="font-size:13px;font-weight:700;fill:#6234B2">Hablar con alguien</text>
+
+  <rect x="580" y="310" width="82" height="34" rx="12" fill="#6234B2"/>
+  <text x="596" y="332" style="font-size:13px;fill:#FFFFFA">Horarios</text>
+
+  <rect x="450" y="358" width="200" height="82" rx="12" fill="#F1ECFB"/>
+  <text x="462" y="382" style="font-size:13px">Atendemos de lunes a sábado</text>
+  <text x="462" y="402" style="font-size:13px">de 9 a 19. ¿Quieres que te</text>
+  <text x="462" y="422" style="font-size:13px">pase la dirección del local?</text>
+
+  <rect x="448" y="500" width="216" height="36" rx="10" fill="#FFFFFF" stroke="#E4DAFD" stroke-width="1.5"/>
+  <text x="462" y="523" style="font-size:13px;fill:#666666">Escribe un mensaje…</text>
+  <circle cx="646" cy="518" r="12" fill="#6234B2"/>
+  <path d="M641 518 h9 M646 513 l5 5 -5 5" stroke="#FFFFFA" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
